@@ -188,27 +188,27 @@ export default {
         return
       }
       if (this.currentPhase === 0) { /** Is "setup" phase. */
-        if (cell.item && this.isNotHoleOrWall(cell) && this.canTankMove(cell.item)) { /** Tank is on cell, prepare movement. */
+        if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.canTankMove(cell.item)) { /** Tank is on cell, prepare movement. */
           this.resetBoardColors()
           this.changePhase(this.currentPhase + 1, false)
           this.handleCellClick(rowIndex, cellIndex)
-        } else if (cell.item && this.isNotHoleOrWall(cell) && !this.canTankMove(cell.item) && this.canTankAttack(cell.item)) { /** Tank is on cell, cannot move, but can attack. */
+        } else if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && !this.canTankMove(cell.item) && this.canTankAttack(cell.item)) { /** Tank is on cell, cannot move, but can attack. */
           this.resetBoardColors()
           this.currentPhase++
           this.changePhase(this.currentPhase + 1, false)
           this.handleCellClick(rowIndex, cellIndex)
-        } else if (cell.item === null && cell.baseType === 'respondSpot') { /** Cell is from respond baseType, and no item is there. */
+        } else if ((cell.item === null || this.isNotTank(cell.item)) && cell.baseType === 'respondSpot') { /** Cell is from respond baseType, and no item is there. */
           this.putTankOnBoard(rowIndex, cellIndex)
         }
       } else if (this.currentPhase === 1 || this.currentPhase === 3) { /** Is first or second "movements" phase. */
-        if (cell.item && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.base) { /** Tank have moves and cell is "base" color. */
+        if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.base) { /** Tank have moves and cell is "base" color. */
           this.resetBoardColors()
           this.setCurrentCell(rowIndex, cellIndex)
           this.setSurroundingTalesColor(rowIndex, cellIndex, colors.move)
-        } else if (cell.item && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.move) { /** Tank have moves and cell is "move" color. */
+        } else if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.move) { /** Tank have moves and cell is "move" color. */
           this.currentCell = null
           this.resetBoardColors(rowIndex, cellIndex, colors.base)
-        } else if (!cell.item && this.isNotHoleOrWall(cell) && cell.backgroundColor === colors.move) { /** Cell is that tank can move into. */
+        } else if ((!cell.item || this.isNotTank(cell.item)) && this.isNotHoleOrWall(cell) && cell.backgroundColor === colors.move) { /** Cell is that tank can move into. */
           this.moveTank(rowIndex, cellIndex)
           this.handleCellClick(rowIndex, cellIndex)
         } else { /** Resets need to be done. */
@@ -221,11 +221,11 @@ export default {
           this.changePhase(this.currentPhase === 1 ? 2 : 4, false)
         }
       } else if (this.currentPhase === 2) { /** Is "attacks" phase. */
-        if (cell.item && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && cell.backgroundColor !== colors.attack) { /** Tank is on this not-"attack" colored cell, show the tank`s range. */
+        if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && cell.backgroundColor !== colors.attack) { /** Tank is on this not-"attack" colored cell, show the tank`s range. */
           this.resetBoardColors()
           this.setCurrentCell(rowIndex, cellIndex)
           this.setRangeColor(rowIndex, cellIndex, colors.attack)
-        } else if (cell.item && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && this.rows[rowIndex][cellIndex].item && (this.rows[rowIndex][cellIndex].item.positions.x === this.currentCell.x && this.rows[rowIndex][cellIndex].item.positions.y === this.currentCell.y) && cell.backgroundColor === colors.attack) { /** Tank range is shown, hide the range. */
+        } else if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && this.rows[rowIndex][cellIndex].item && (this.rows[rowIndex][cellIndex].item.positions.x === this.currentCell.x && this.rows[rowIndex][cellIndex].item.positions.y === this.currentCell.y) && cell.backgroundColor === colors.attack) { /** Tank range is shown, hide the range. */
           this.currentCell = null
           this.resetBoardColors()
         } else if (this.cellCanBeAttacked(cell, rowIndex, cellIndex)) { /** Cell is "attack" color and have target - perform attack. */
@@ -245,7 +245,7 @@ export default {
             this.makeHole(rowIndex, cellIndex)
           }
         }
-        if (cell.item === null && cell.backgroundColor === colors.base) { /** Cell is "base" color. */
+        if ((cell.item === null || this.isNotTank(cell.item)) && cell.backgroundColor === colors.base) { /** Cell is "base" color. */
           this.currentCell = null
           this.resetBoardColors()
         }
@@ -269,6 +269,9 @@ export default {
     },
     isNotHole (cell) {
       return cell.baseType !== 'hole'
+    },
+    isNotTank (item) {
+      return item.baseType !== 'tank'
     },
     isCellExistAndNotHole (i, j) {
       return !!(this.cellExist(i, j) && this.isNotHole(this.rows[i][j]))
@@ -535,7 +538,7 @@ export default {
         [i + 1, j + 1]
       ]
       operations.map(operation => {
-        if (this.cellExist(operation[0], operation[1]) && this.isNotHoleOrWall(this.rows[operation[0]][operation[1]]) && !this.rows[operation[0]][operation[1]].item) {
+        if (this.cellExist(operation[0], operation[1]) && this.isNotHoleOrWall(this.rows[operation[0]][operation[1]]) && (!this.rows[operation[0]][operation[1]].item || this.isNotTank(this.rows[operation[0]][operation[1]].item))) {
           this.rows[operation[0]][operation[1]].backgroundColor = color
         }
       })
@@ -549,6 +552,20 @@ export default {
       this.setSurroundingTalesColor(this.currentCell.x, this.currentCell.y, colors.base)
       this.players[this.currentPlayer].tanks.forEach(tank => {
         if (tank.positions.x === this.currentCell.x && tank.positions.y === this.currentCell.y) {
+          const item = this.rows[rowIndex][cellIndex].item
+          if (item) {
+            switch (item.baseType) {
+              case 'money':
+                this.players[this.currentPlayer].money += 5
+                break
+              case 'ammo':
+                this.players[this.currentPlayer].items.ammo.quantity++
+                break
+              case 'fuel':
+                this.players[this.currentPlayer].items.fuel.quantity += 2
+                break
+            }
+          }
           tank.positions.x = rowIndex
           tank.positions.y = cellIndex
           tank.moves--

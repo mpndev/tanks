@@ -6,7 +6,7 @@ export default [
     playerId: null,
     isHoveredOnBoard: false,
     isHoveredOnInfo: false,
-    price: 33,
+    price: 40,
     isOnBoard: false,
     isDead: false,
     attackWasTriggered: false,
@@ -20,10 +20,10 @@ export default [
     baseType: 'tank',
     speed: 3,
     range: 3,
-    damage: 3,
+    damage: 2,
     health: 4,
-    fuel: 20,
-    ammo: 12
+    fuel: 0,
+    ammo: 0
   },
   /** runner tank */
   {
@@ -32,24 +32,24 @@ export default [
     playerId: null,
     isHoveredOnBoard: false,
     isHoveredOnInfo: false,
-    price: 33,
+    price: 46,
     isOnBoard: false,
     isDead: false,
     attackWasTriggered: false,
-    moves: 5,
-    baseHealth: 2,
+    moves: 6,
+    baseHealth: 4,
     positions: {
       x: null,
       y: null
     },
     type: 'B',
     baseType: 'tank',
-    speed: 5,
+    speed: 6,
     range: 3,
     damage: 2,
-    health: 2,
-    fuel: 21,
-    ammo: 8
+    health: 4,
+    fuel: 0,
+    ammo: 0
   },
   /** rangy tank */
   {
@@ -58,24 +58,24 @@ export default [
     playerId: null,
     isHoveredOnBoard: false,
     isHoveredOnInfo: false,
-    price: 33,
+    price: 59,
     isOnBoard: false,
     isDead: false,
     attackWasTriggered: false,
-    moves: 2,
-    baseHealth: 3,
+    moves: 3,
+    baseHealth: 4,
     positions: {
       x: null,
       y: null
     },
     type: 'C',
     baseType: 'tank',
-    speed: 2,
-    range: 5,
+    speed: 3,
+    range: 8,
     damage: 3,
-    health: 3,
-    fuel: 20,
-    ammo: 10
+    health: 4,
+    fuel: 0,
+    ammo: 0
   },
   /** healthy tank */
   {
@@ -84,24 +84,24 @@ export default [
     playerId: null,
     isHoveredOnBoard: false,
     isHoveredOnInfo: false,
-    price: 33,
+    price: 52,
     isOnBoard: false,
     isDead: false,
     attackWasTriggered: false,
-    moves: 2,
-    baseHealth: 6,
+    moves: 3,
+    baseHealth: 8,
     positions: {
       x: null,
       y: null
     },
     type: 'D',
     baseType: 'tank',
-    speed: 2,
-    range: 4,
+    speed: 3,
+    range: 3,
     damage: 2,
-    health: 6,
-    fuel: 19,
-    ammo: 10
+    health: 8,
+    fuel: 0,
+    ammo: 0
   },
   /** tower tank */
   {
@@ -110,7 +110,7 @@ export default [
     playerId: null,
     isHoveredOnBoard: false,
     isHoveredOnInfo: false,
-    price: 33,
+    price: 63,
     isOnBoard: false,
     isDead: false,
     attackWasTriggered: false,
@@ -125,8 +125,8 @@ export default [
     speed: 0,
     range: 6,
     damage: 1,
-    health: 6,
-    fuel: 20,
-    ammo: 16
+    health: 12,
+    fuel: 0,
+    ammo: 0
   }
 ]

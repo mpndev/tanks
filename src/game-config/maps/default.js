@@ -3,6 +3,32 @@ const respondSpot = { id: null, baseType: 'respondSpot', item: null, backgroundC
 const hole = { id: null, baseType: 'hole', item: null, backgroundColor: 'orange' }
 const wall = { id: null, baseType: 'wall', item: null, backgroundColor: 'black' }
 
+export const shopItems = [
+  {
+    label: '&#128163;',
+    baseType: 'ammo'
+  },
+  {
+    label: '&#128738;&#128738;',
+    baseType: 'fuel'
+  },
+  {
+    label: '5&#128176;',
+    baseType: 'money'
+  }
+]
+
+export const getShopItem = (type) => {
+  switch (type) {
+    case 'ammo':
+      return { ...shopItems[0] }
+    case 'fuel':
+      return { ...shopItems[1] }
+    case 'money':
+      return { ...shopItems[2] }
+  }
+}
+
 export const getBase = () => {
   return { ...baseTale }
 }
@@ -45,6 +71,33 @@ export const generate = () => {
   }
   for (let i = 0; i < 4; i++) {
     defaultMapConfig[getRandomInt(1, 19)][getRandomInt(1, 19)] = getResp()
+  }
+  for (let i = 0; i < 20; i++) {
+    const x = getRandomInt(1, 19)
+    const y = getRandomInt(1, 19)
+    if (defaultMapConfig[x][y].baseType !== 'baseTale') {
+      i--
+    } else {
+      defaultMapConfig[x][y].item = getShopItem('money')
+    }
+  }
+  for (let i = 0; i < 10; i++) {
+    const x = getRandomInt(1, 19)
+    const y = getRandomInt(1, 19)
+    if (defaultMapConfig[x][y].baseType !== 'baseTale') {
+      i--
+    } else {
+      defaultMapConfig[x][y].item = getShopItem('ammo')
+    }
+  }
+  for (let i = 0; i < 15; i++) {
+    const x = getRandomInt(1, 19)
+    const y = getRandomInt(1, 19)
+    if (defaultMapConfig[x][y].baseType !== 'baseTale') {
+      i--
+    } else {
+      defaultMapConfig[x][y].item = getShopItem('fuel')
+    }
   }
 }
 

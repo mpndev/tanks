@@ -2,7 +2,7 @@ export default [
   {
     id: 1,
     exp: 0,
-    money: 40,
+    money: 70,
     name: 'Martin',
     color: 'green',
     tanks: [],
@@ -32,7 +32,7 @@ export default [
   {
     id: 2,
     exp: 0,
-    money: 40,
+    money: 70,
     name: 'John',
     color: 'blue',
     tanks: [],
@@ -62,7 +62,7 @@ export default [
   {
     id: 3,
     exp: 0,
-    money: 40,
+    money: 70,
     name: 'Bob',
     color: 'purple',
     tanks: [],
@@ -92,7 +92,7 @@ export default [
   {
     id: 4,
     exp: 0,
-    money: 40,
+    money: 70,
     name: 'Emma',
     color: 'pink',
     tanks: [],
