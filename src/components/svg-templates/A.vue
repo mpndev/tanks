@@ -43,10 +43,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 3.5vh;
-    height: 3.5vh;
+    width: 4vmin;
+    height: 4vmin;
     border-radius: 50%;
     cursor: default;
-    font-size: 1.3vh;
+    font-size: 1.3vmin;
   }
 </style>

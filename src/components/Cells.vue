@@ -37,8 +37,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 4.5vh;
-    height: 4.5vh;
+    width: 4.5vmin;
+    height: 4.5vmin;
     border: 1px solid rgba(220, 220, 220, 0.8);
   }
 </style>

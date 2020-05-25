@@ -820,8 +820,8 @@ export default {
   }
   .screen {
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100vmin;
     justify-content: space-evenly;
     align-items: center;
     margin: 0 auto;
@@ -830,32 +830,32 @@ export default {
   .player-panel {
     display: flex;
     flex-direction: column;
-    width: 50vh;
-    height: 90vh;
+    width: 50vmin;
+    height: 90vmin;
     border: 1px solid blue;
     justify-content: space-evenly;
     align-items: center;
   }
   .users-panel {
     display: flex;
-    width: 45vh;
-    height: 5vh;
+    width: 45vmin;
+    height: 5vmin;
     justify-content: space-evenly;
     align-items: center;
   }
   .user-panel {
     display: flex;
     width: 100%;
-    height: 5vh;
+    height: 5vmin;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
+    font-size: 1.1vmin;
   }
   .tanks-panel {
     display: flex;
     flex-direction: column;
-    width: 45vh;
-    height: 45vh;
+    width: 45vmin;
+    height: 45vmin;
     border: 1px solid blue;
     justify-content: flex-start;
     align-items: center;
@@ -864,11 +864,11 @@ export default {
   .tank-panel {
     display: flex;
     flex-wrap: wrap;
-    width: 40vh;
-    min-height: 5vh;
+    width: 40vmin;
+    min-height: 5vmin;
     justify-content: flex-start;
     align-items: center;
-    font-size: 2.5vh;
+    font-size: 2.5vmin;
   }
   .tank-panel:not(:first-child) {
     border-top: 1px solid blue;
@@ -890,22 +890,23 @@ export default {
   }
   .shop-panel {
     display: flex;
-    width: 45vh;
-    height: 5vh;
+    width: 45vmin;
+    height: 5vmin;
     justify-content: space-between;
     align-items: center;
+    font-size: 2vmin;
   }
   .shop-tanks {
     display: flex;
-    width: 100%;
-    height: 5vh;
+    width: 45vmin;
+    height: 5vmin;
     justify-content: center;
     align-items: center;
   }
   .shop-tank {
     display: flex;
-    width: 30%;
-    height: 5vh;
+    width: 20%;
+    height: 5vmin;
     border: 1px solid blue;
     justify-content: center;
     align-items: center;
@@ -913,20 +914,20 @@ export default {
   .shop-items, .items-items {
     display: flex;
     width: 100%;
-    height: 5vh;
+    height: 5vmin;
     justify-content: center;
     align-items: center;
   }
-  .shop-item, items-item {
+  .shop-item {
     display: flex;
     width: 100%;
-    height: 5vh;
+    height: 5vmin;
     border: 1px solid blue;
     justify-content: center;
     align-items: center;
   }
   .shop-item-icon, .items-item-icon {
-    font-size: 32px;
+    font-size: 2.5vmin;
   }
   .shop-tank-icon-zero, .shop-item-icon-zero, .items-item-icon-zero {
     opacity: .5;
@@ -937,31 +938,33 @@ export default {
   }
   .phases-panel {
     display: flex;
-    width: 45vh;
-    height: 5vh;
+    width: 45vmin;
+    height: 5vmin;
     justify-content: center;
     align-items: center;
   }
   .phase-panel {
     display: flex;
     width: 20%;
-    height: 5vh;
+    height: 5vmin;
     border: 1px solid blue;
     justify-content: center;
     align-items: center;
+    font-size: 1.7vmin;
   }
   .items-panel {
     display: flex;
-    width: 45vh;
-    height: 5vh;
+    width: 45vmin;
+    height: 5vmin;
     border: 1px solid blue;
     justify-content: center;
     align-items: center;
+    font-size: 2vmin;
   }
   .board {
     display: flex;
-    width: 90vh;
-    height: 90vh;
+    width: 90vmin;
+    height: 90vmin;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
