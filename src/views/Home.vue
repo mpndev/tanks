@@ -52,7 +52,7 @@
           <p class="tank-panel-item"><span>&#128095;</span>{{ tank.moves }}</p>
           <p class="tank-panel-item" @click="useItem(tank, 'fuel')"><span :class="{'tank-panel-item-icon-not-zero': player.items.fuel.quantity > 0}">&#128738;</span>{{ tank.fuel }}</p>
           <p class="tank-panel-item" @click="useItem(tank, 'ammo')"><span :class="{'tank-panel-item-icon-not-zero': player.items.ammo.quantity > 0}">&#128163;</span>{{ tank.ammo }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'health')"><span :class="{'tank-panel-item-icon-not-zero': player.items.health.quantity > 0}">&#128420;</span>{{ tank.health }}</p>
+          <p class="tank-panel-item" @click="useItem(tank, 'health')"><span :class="{'tank-panel-item-icon-not-zero': player.items.health.quantity > 0 && tank.health < tank.baseHealth}">&#128420;</span>{{ tank.health }}</p>
         </div>
       </div>
       <div class="shop-panel">
@@ -161,11 +161,13 @@ export default {
     },
     handleTankPanelTankMouseEnter (tank) {
       tank.isHoveredOnInfo = true
-      if (this.canTankAttack(tank)) {
-        this.setRangeColor(tank.positions.x, tank.positions.y, colors.attack)
-      }
-      if (this.canTankMove(tank)) {
-        this.setSurroundingTalesColor(tank.positions.x, tank.positions.y, colors.move)
+      if (tank.isOnBoard) {
+        if (this.canTankAttack(tank)) {
+          this.setRangeColor(tank.positions.x, tank.positions.y, colors.attack)
+        }
+        if (this.canTankMove(tank)) {
+          this.setSurroundingTalesColor(tank.positions.x, tank.positions.y, colors.move)
+        }
       }
     },
     handleTankPanelTankMouseLeave (tank) {
@@ -233,6 +235,7 @@ export default {
           if (this.canTankAttack(tank)) {
             this.attackWasTriggered(tank)
             this.incrementTankExp(tank)
+            this.showTankMessage(tank, '+ 1 exp')
             this.hitTheTarget(tank, rowIndex, cellIndex)
             this.afterTankAttack()
           }
@@ -241,6 +244,7 @@ export default {
           if (this.canTankAttack(tank)) {
             this.attackWasTriggered(tank)
             this.incrementTankExp(tank)
+            this.showTankMessage(tank, '+ 1 exp')
             this.afterTankAttack()
             this.makeHole(rowIndex, cellIndex)
           }
@@ -553,16 +557,20 @@ export default {
       this.players[this.currentPlayer].tanks.forEach(tank => {
         if (tank.positions.x === this.currentCell.x && tank.positions.y === this.currentCell.y) {
           const item = this.rows[rowIndex][cellIndex].item
+          let message = ''
           if (item) {
             switch (item.baseType) {
               case 'money':
                 this.players[this.currentPlayer].money += 5
+                message = '+ 5 💰'
                 break
               case 'ammo':
                 this.players[this.currentPlayer].items.ammo.quantity++
+                message = '+ 1 💣'
                 break
               case 'fuel':
                 this.players[this.currentPlayer].items.fuel.quantity += 2
+                message = '+ 2 🛢'
                 break
             }
           }
@@ -572,6 +580,7 @@ export default {
           tank.fuel--
           this.rows[this.currentCell.x][this.currentCell.y].item = null
           this.rows[rowIndex][cellIndex].item = tank
+          this.showTankMessage(tank, message)
         }
       })
     },
@@ -622,9 +631,11 @@ export default {
         player.tanks.forEach(target => {
           if (target.positions.x === rowIndex && target.positions.y === cellIndex) {
             target.health -= tank.damage
+            this.showTankMessage(target, `- ${tank.damage} health`)
             if (target.health < 1) {
               this.players[this.currentPlayer].exp += (3 + (target.level * 2))
               this.incrementTankExp(tank, 4 + (target.level > tank.level ? Math.floor((target.level - tank.level) * 1.5) - 1 : 1))
+              this.showTankMessage(tank, `+ ${4 + (target.level > tank.level ? Math.floor((target.level - tank.level) * 1.5) - 1 : 1)} exp`)
               this.incrementPlayerBonusPoints(this.players[this.currentPlayer])
               target.positions.x = null
               target.y = null
@@ -684,11 +695,21 @@ export default {
               tank.moves = tank.speed
               tank.attackWasTriggered = false
               this.incrementTankExp(tank)
+              this.showTankMessage(tank, '+ 1 exp')
             }
           })
         }
       })
       this.currentPlayer = nextPlayerIndex
+    },
+    showTankMessage (tank, message) {
+      tank.message = message
+      this.hideTankMessage(tank)
+    },
+    hideTankMessage (tank) {
+      setTimeout(() => {
+        tank.message = ''
+      }, 2000)
     },
     incrementTankExp (tank, times = 1) {
       tank.exp++
@@ -747,6 +768,7 @@ export default {
         if (player.money >= item.price) {
           player.money -= item.price
           player.items[item.label].quantity += 1
+          return true
         }
       }
     },
@@ -785,6 +807,8 @@ export default {
               player.items[label].quantity--
               tank.ammo += 1
               player.exp += 1
+            } else if (this.buyItem(0)) {
+              this.useItem(tank, 'ammo')
             }
             break
           case 'fuel':
@@ -792,6 +816,8 @@ export default {
               player.items[label].quantity--
               tank.fuel += 1
               player.exp += 1
+            } else if (this.buyItem(1)) {
+              this.useItem(tank, 'fuel')
             }
             break
           case 'health':
@@ -799,6 +825,8 @@ export default {
               player.items[label].quantity--
               tank.health += 1
               player.exp += 1
+            } else if (this.buyItem(2)) {
+              this.useItem(tank, 'health')
             }
             break
         }
@@ -811,6 +839,7 @@ export default {
           p.tanks.forEach(t => {
             if (t.isOnBoard) {
               t.health -= 2
+              this.showTankMessage(t, '- 2 health')
               this.players[this.currentPlayer].exp += 1
               if (t.health <= 0) {
                 t.isOnBoard = false

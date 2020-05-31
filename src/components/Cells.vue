@@ -44,7 +44,7 @@ export default {
     align-items: center;
     width: 4.5vmin;
     height: 4.5vmin;
-    border: 1px solid rgba(220, 220, 220, 0.8);
+    /* border: 1px solid rgba(220, 220, 220, 0.8); */
   }
   .shop-item-on-board {
     font-size: 1.6vmin;

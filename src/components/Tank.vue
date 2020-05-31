@@ -1,11 +1,17 @@
 <template>
   <div
-    :style="{border: tank.isHoveredOnInfo ? '5px solid #fa800d' : 'none'}"
+    :style="{border: tank.isHoveredOnInfo ? '5px solid #fa800d' : 'none', position: 'relative'}"
     v-show="!tank.isDead"
     @mouseenter="tank.isHoveredOnBoard = true"
     @mouseleave="tank.isHoveredOnBoard = false"
     :title="`🏆${tank.level} 🖤${tank.health}`"
   >
+    <div
+      class="tank-notification"
+      v-if="tank.message.length"
+    >
+      {{ tank.message }}
+    </div>
     <asvg v-if="tank.type === 'A'" :tank="tank" :players="players" />
     <bsvg v-if="tank.type === 'B'" :tank="tank" :players="players" />
     <csvg v-if="tank.type === 'C'" :tank="tank" :players="players" />
@@ -35,3 +41,26 @@ export default {
   ]
 }
 </script>
+
+<style>
+  .tank-notification {
+    position: absolute;
+    top: -2vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10vmin;
+    color: purple;
+    font-size: 2.4vmin;
+    text-align: center;
+    animation: up 2s linear;
+  }
+
+  @keyframes up {
+    0% {
+      top: -2vmin
+    }
+    100% {
+      top: -5vmin
+    }
+  }
+</style>
