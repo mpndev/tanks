@@ -42,6 +42,7 @@
             <csvg v-if="tank.type === 'C'" :tank="tank" :players="players" />
             <dsvg v-if="tank.type === 'D'" :tank="tank" :players="players" />
             <esvg v-if="tank.type === 'E'" :tank="tank" :players="players" />
+            <fsvg v-if="tank.type === 'F'" :tank="tank" :players="players" />
           </p>
           <p class="tank-panel-item">&#127942;{{ tank.level }}</p>
           <p class="tank-panel-item">&#127894;{{ tank.exp }}</p>
@@ -68,6 +69,7 @@
             <csvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'C'" />
             <dsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'D'" />
             <esvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'E'" />
+            <fsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'F'" />
             ${{ shopTank.price }}
           </div>
         </div>
@@ -124,6 +126,7 @@ import Bsvg from '../components/svg-templates/B'
 import Csvg from '../components/svg-templates/C'
 import Dsvg from '../components/svg-templates/D'
 import Esvg from '../components/svg-templates/E'
+import Fsvg from '../components/svg-templates/F'
 export default {
   name: 'Home',
   components: {
@@ -132,7 +135,8 @@ export default {
     Bsvg,
     Csvg,
     Dsvg,
-    Esvg
+    Esvg,
+    Fsvg
   },
   data: () => {
     return {

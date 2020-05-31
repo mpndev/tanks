@@ -17,6 +17,7 @@
     <csvg v-if="tank.type === 'C'" :tank="tank" :players="players" />
     <dsvg v-if="tank.type === 'D'" :tank="tank" :players="players" />
     <esvg v-if="tank.type === 'E'" :tank="tank" :players="players" />
+    <fsvg v-if="tank.type === 'F'" :tank="tank" :players="players" />
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import Bsvg from './svg-templates/B'
 import Csvg from './svg-templates/C'
 import Dsvg from './svg-templates/D'
 import Esvg from './svg-templates/E'
+import Fsvg from './svg-templates/F'
 export default {
   name: 'Tank',
   components: {
@@ -33,7 +35,8 @@ export default {
     Bsvg,
     Csvg,
     Dsvg,
-    Esvg
+    Esvg,
+    Fsvg
   },
   props: [
     'tank',

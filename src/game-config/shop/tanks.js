@@ -133,5 +133,32 @@ export default [
     health: 12,
     fuel: 0,
     ammo: 0
+  },
+  /** jeep */
+  {
+    level: 1,
+    exp: 0,
+    playerId: null,
+    isHoveredOnBoard: false,
+    isHoveredOnInfo: false,
+    message: '',
+    price: 19,
+    isOnBoard: false,
+    isDead: false,
+    attackWasTriggered: false,
+    moves: 8,
+    baseHealth: 1,
+    positions: {
+      x: null,
+      y: null
+    },
+    type: 'F',
+    baseType: 'tank',
+    speed: 8,
+    range: 0,
+    damage: 0,
+    health: 1,
+    fuel: 0,
+    ammo: 0
   }
 ]
