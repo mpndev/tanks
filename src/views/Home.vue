@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="shop-panel">
-        <div class="shop-tanks">
+        <div class="shop-tanks" :class="{ hidden: currentPhase !== 0 }">
           <div
             class="shop-tank"
             v-for="(shopTank, shopTanksIndex) in shopTanks"
@@ -76,7 +76,7 @@
       </div>
       <div class="shop-panel">
         <div
-          class="shop-items"
+          class="shop-items" :class="{ hidden: currentPhase !== 0 }"
         >
           <div
             class="shop-item"
@@ -903,11 +903,12 @@ export default {
   }
   .tanks-panel {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    flex-direction: row;
     width: 45vmin;
     height: 45vmin;
     border: 1px solid blue;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     overflow: scroll;
   }
@@ -953,6 +954,9 @@ export default {
     justify-content: center;
     align-items: center;
   }
+  .shop-tanks.hidden {
+    display: none;
+  }
   .shop-tank {
     display: flex;
     width: 20%;
@@ -967,6 +971,9 @@ export default {
     height: 5vmin;
     justify-content: center;
     align-items: center;
+  }
+  .shop-items.hidden {
+    display: none;
   }
   .shop-item {
     display: flex;
