@@ -6,6 +6,7 @@
           class="user-panel"
           :style="{border: `1px solid ${innerPlayer.color}`, boxShadow: currentPlayer === innerPlayerIndex ? `0 0 0 5px ${innerPlayer.color}` : 'none'}"
           v-for="(innerPlayer, innerPlayerIndex) in players"
+          :title="`\n ${innerPlayer.name}: ${innerPlayer.money}💰 EXP: ${innerPlayer.exp} \n\n Tanks: 😶: ${innerPlayer.tanks.filter(t => !t.isDead).length} 💀: ${innerPlayer.tanks.filter(t => t.isDead).length} \n`"
           :key="innerPlayerIndex"
         >
           {{ innerPlayer.name }} | {{ innerPlayer.money }}💰 | exp: {{ innerPlayer.exp }}
@@ -164,6 +165,7 @@
             class="shop-tank"
             v-for="(shopTank, shopTanksIndex) in shopTanks"
             :key="shopTanksIndex"
+            :title="`${shopTank.shopTitle}\n          ${shopTank.speed}:${shopTank.icons.speed.icon}    ${shopTank.range}:${shopTank.icons.range.icon}    ${shopTank.damage}:${shopTank.icons.damage.icon}    ${shopTank.baseHealth}:${shopTank.icons.baseHealth.icon}          \n`"
             @click="buyTank(shopTanksIndex)"
           >
             <asvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.subTypeLabel === 'A'" />
