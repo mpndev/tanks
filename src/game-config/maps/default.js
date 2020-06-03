@@ -1,20 +1,57 @@
-const baseTale = { id: null, baseType: 'baseTale', item: null, backgroundColor: 'yellow' }
-const respondSpot = { id: null, baseType: 'respondSpot', item: null, backgroundColor: 'yellow' }
-const hole = { id: null, baseType: 'hole', item: null, backgroundColor: 'orange' }
-const wall = { id: null, baseType: 'wall', item: null, backgroundColor: 'black' }
+const baseTale = {
+  id: null,
+  baseType: 'baseTale',
+  item: null,
+  backgroundColor: 'yellow'
+}
+const respondSpot = {
+  id: null,
+  baseType: 'respondSpot',
+  item: null,
+  backgroundColor: 'yellow'
+}
+const hole = {
+  id: null,
+  baseType: 'hole',
+  item: null,
+  backgroundColor: 'orange'
+}
+const wall = {
+  id: null,
+  baseType: 'wall',
+  item: null,
+  backgroundColor: 'black'
+}
 
 export const shopItems = [
   {
-    label: '&#128163;',
+    label: '💣',
     baseType: 'ammo'
   },
   {
-    label: '&#128738;&#128738;',
-    baseType: 'fuel'
+    label: '🛢',
+    baseType: 'fuel',
+    subBaseType: 'single'
   },
   {
-    label: '5&#128176;',
-    baseType: 'money'
+    label: '🛢🛢',
+    baseType: 'fuel',
+    subBaseType: 'double'
+  },
+  {
+    label: '2💰',
+    baseType: 'money',
+    subBaseType: 'two'
+  },
+  {
+    label: '5💰',
+    baseType: 'money',
+    subBaseType: 'five'
+  },
+  {
+    label: '10💰',
+    baseType: 'money',
+    subBaseType: 'ten'
   }
 ]
 
@@ -22,10 +59,16 @@ export const getShopItem = (type) => {
   switch (type) {
     case 'ammo':
       return { ...shopItems[0] }
-    case 'fuel':
+    case 'fuelSingle':
       return { ...shopItems[1] }
-    case 'money':
+    case 'fuelDouble':
       return { ...shopItems[2] }
+    case 'moneyTwo':
+      return { ...shopItems[3] }
+    case 'moneyFive':
+      return { ...shopItems[4] }
+    case 'moneyTen':
+      return { ...shopItems[5] }
   }
 }
 
@@ -58,9 +101,9 @@ export const generate = () => {
   for (let i = 0; i <= 19; i++) {
     defaultMapConfig[i] = []
     for (let j = 0; j <= 19; j++) {
-      if (Math.random() > 0.96) {
+      if (Math.random() > 0.91) {
         defaultMapConfig[i][j] = getHole()
-      } else if (Math.random() > 0.78) {
+      } else if (Math.random() > 0.73) {
         defaultMapConfig[i][j] = getWall()
       } else {
         defaultMapConfig[i][j] = getBase()
@@ -72,13 +115,31 @@ export const generate = () => {
   for (let i = 0; i < 4; i++) {
     defaultMapConfig[getRandomInt(1, 19)][getRandomInt(1, 19)] = getResp()
   }
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 45; i++) {
     const x = getRandomInt(1, 19)
     const y = getRandomInt(1, 19)
     if (defaultMapConfig[x][y].baseType !== 'baseTale') {
       i--
     } else {
-      defaultMapConfig[x][y].item = getShopItem('money')
+      defaultMapConfig[x][y].item = getShopItem('moneyTwo')
+    }
+  }
+  for (let i = 0; i < 15; i++) {
+    const x = getRandomInt(1, 19)
+    const y = getRandomInt(1, 19)
+    if (defaultMapConfig[x][y].baseType !== 'baseTale') {
+      i--
+    } else {
+      defaultMapConfig[x][y].item = getShopItem('moneyFive')
+    }
+  }
+  for (let i = 0; i < 4; i++) {
+    const x = getRandomInt(1, 19)
+    const y = getRandomInt(1, 19)
+    if (defaultMapConfig[x][y].baseType !== 'baseTale') {
+      i--
+    } else {
+      defaultMapConfig[x][y].item = getShopItem('moneyTen')
     }
   }
   for (let i = 0; i < 10; i++) {
@@ -90,13 +151,22 @@ export const generate = () => {
       defaultMapConfig[x][y].item = getShopItem('ammo')
     }
   }
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 25; i++) {
     const x = getRandomInt(1, 19)
     const y = getRandomInt(1, 19)
     if (defaultMapConfig[x][y].baseType !== 'baseTale') {
       i--
     } else {
-      defaultMapConfig[x][y].item = getShopItem('fuel')
+      defaultMapConfig[x][y].item = getShopItem('fuelSingle')
+    }
+  }
+  for (let i = 0; i < 10; i++) {
+    const x = getRandomInt(1, 19)
+    const y = getRandomInt(1, 19)
+    if (defaultMapConfig[x][y].baseType !== 'baseTale') {
+      i--
+    } else {
+      defaultMapConfig[x][y].item = getShopItem('fuelDouble')
     }
   }
 }

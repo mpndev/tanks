@@ -12,12 +12,12 @@
     >
       {{ tank.message }}
     </div>
-    <asvg v-if="tank.type === 'A'" :tank="tank" :players="players" />
-    <bsvg v-if="tank.type === 'B'" :tank="tank" :players="players" />
-    <csvg v-if="tank.type === 'C'" :tank="tank" :players="players" />
-    <dsvg v-if="tank.type === 'D'" :tank="tank" :players="players" />
-    <esvg v-if="tank.type === 'E'" :tank="tank" :players="players" />
-    <fsvg v-if="tank.type === 'F'" :tank="tank" :players="players" />
+    <asvg v-if="tank.subTypeLabel === 'A'" :tank="tank" :players="players" />
+    <bsvg v-if="tank.subTypeLabel === 'B'" :tank="tank" :players="players" />
+    <csvg v-if="tank.subTypeLabel === 'C'" :tank="tank" :players="players" />
+    <dsvg v-if="tank.subTypeLabel === 'D'" :tank="tank" :players="players" />
+    <esvg v-if="tank.subTypeLabel === 'E'" :tank="tank" :players="players" />
+    <fsvg v-if="tank.subTypeLabel === 'F'" :tank="tank" :players="players" />
   </div>
 </template>
 

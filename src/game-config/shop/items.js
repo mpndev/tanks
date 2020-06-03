@@ -1,21 +1,25 @@
 export default [
   {
     label: 'ammo',
-    icon: '&#128163;',
+    shopTitle: 'Click to add 1 to your 💣.',
+    icon: '💣',
     price: 5
   },
   {
     label: 'fuel',
-    icon: '&#128738;',
+    shopTitle: 'Click to add 1 to your 🛢.',
+    icon: '🛢',
     price: 1
   },
   {
     label: 'health',
-    icon: '&#128295;',
+    shopTitle: 'Click to add 1 to your 🔧.',
+    icon: '🔧',
     price: 8
   },
   {
     label: 'massAttack',
+    shopTitle: 'Click to add 1 to your ✈️.',
     icon: '✈️',
     price: 15
   }

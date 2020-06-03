@@ -8,7 +8,7 @@
           v-for="(innerPlayer, innerPlayerIndex) in players"
           :key="innerPlayerIndex"
         >
-          {{ innerPlayer.name }} | {{ innerPlayer.money }}$ | exp: {{ innerPlayer.exp }}
+          {{ innerPlayer.name }} | {{ innerPlayer.money }}💰 | exp: {{ innerPlayer.exp }}
         </div>
       </div>
       <div class="items-panel">
@@ -16,11 +16,12 @@
           class="items-items"
           v-for="(item, itemIndex) in players[currentPlayer].items"
           :key="itemIndex"
+          :title="item.playerPanelTitle"
           @click="massAttack(itemIndex)"
         >
           <span
             class="items-item-icon"
-            :class="{'items-item-icon-zero': item.quantity === 0}"
+            :class="{'items-item-icon-zero': item.quantity === 0 || (item.icon === '✈️' && currentPhase === 0) || (item.icon !== '✈️' && currentPhase !== 0)}"
             v-html="item.icon"
           />
           X {{ item.quantity }}
@@ -37,23 +38,124 @@
           @mouseleave="handleTankPanelTankMouseLeave(tank)"
         >
           <p class="tank-panel-item">
-            <asvg v-if="tank.type === 'A'" :tank="tank" :players="players" />
-            <bsvg v-if="tank.type === 'B'" :tank="tank" :players="players" />
-            <csvg v-if="tank.type === 'C'" :tank="tank" :players="players" />
-            <dsvg v-if="tank.type === 'D'" :tank="tank" :players="players" />
-            <esvg v-if="tank.type === 'E'" :tank="tank" :players="players" />
-            <fsvg v-if="tank.type === 'F'" :tank="tank" :players="players" />
+            <asvg v-if="tank.subTypeLabel === 'A'" :tank="tank" :players="players" />
+            <bsvg v-if="tank.subTypeLabel === 'B'" :tank="tank" :players="players" />
+            <csvg v-if="tank.subTypeLabel === 'C'" :tank="tank" :players="players" />
+            <dsvg v-if="tank.subTypeLabel === 'D'" :tank="tank" :players="players" />
+            <esvg v-if="tank.subTypeLabel === 'E'" :tank="tank" :players="players" />
+            <fsvg v-if="tank.subTypeLabel === 'F'" :tank="tank" :players="players" />
           </p>
-          <p class="tank-panel-item">&#127942;{{ tank.level }}</p>
-          <p class="tank-panel-item">&#127894;{{ tank.exp }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'speed')"><span :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}">&#8987;</span>{{ tank.speed }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'range')"><span :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}">&#127919;</span>{{ tank.range }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'damage')"><span :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}">&#128481;</span>{{ tank.damage }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'baseHealth')"><span :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}">&#128737;</span>{{ tank.baseHealth }}</p>
-          <p class="tank-panel-item"><span>&#128095;</span>{{ tank.moves }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'fuel')"><span :class="{'tank-panel-item-icon-not-zero': player.items.fuel.quantity > 0}">&#128738;</span>{{ tank.fuel }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'ammo')"><span :class="{'tank-panel-item-icon-not-zero': player.items.ammo.quantity > 0}">&#128163;</span>{{ tank.ammo }}</p>
-          <p class="tank-panel-item" @click="useItem(tank, 'health')"><span :class="{'tank-panel-item-icon-not-zero': player.items.health.quantity > 0 && tank.health < tank.baseHealth}">&#128420;</span>{{ tank.health }}</p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.level.title"
+          >
+            <span>
+              {{ tank.icons.level.icon }}
+            </span>
+            {{ tank.level }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.exp.title"
+          >
+            <span>
+              {{ tank.icons.exp.icon }}
+            </span>
+            {{ tank.exp }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.speed.title"
+            @click="useItem(tank, 'speed')"
+          >
+            <span
+              :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}"
+            >
+              {{ tank.icons.speed.icon }}
+            </span>
+            {{ tank.speed }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.range.title"
+            @click="useItem(tank, 'range')"
+          >
+            <span
+              :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}"
+            >
+              {{ tank.icons.range.icon }}
+            </span>
+            {{ tank.range }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.damage.title"
+            @click="useItem(tank, 'damage')"
+          >
+            <span
+              :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}"
+            >
+              {{ tank.icons.damage.icon }}
+            </span>
+            {{ tank.damage }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.baseHealth.title"
+            @click="useItem(tank, 'baseHealth')"
+          >
+            <span
+              :class="{'tank-panel-icon-not-zero': player.items.bonusPoints.quantity > 0}"
+            >
+              {{ tank.icons.baseHealth.icon }}
+            </span>
+            {{ tank.baseHealth }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.moves.title"
+          >
+            <span>
+              {{ tank.icons.moves.icon }}
+            </span>
+            {{ tank.moves }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.fuel.title"
+            @click="useItem(tank, 'fuel')"
+          >
+            <span
+              :class="{'tank-panel-item-icon-not-zero': player.items.fuel.quantity > 0}"
+            >
+              {{ tank.icons.fuel.icon }}
+            </span>
+            {{ tank.fuel }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.ammo.title"
+            @click="useItem(tank, 'ammo')"
+          >
+            <span
+              :class="{'tank-panel-item-icon-not-zero': player.items.ammo.quantity > 0}"
+            >
+              {{ tank.icons.ammo.icon }}
+            </span>
+            {{ tank.ammo }}
+          </p>
+          <p
+            class="tank-panel-item"
+            :title="tank.icons.health.title"
+            @click="useItem(tank, 'health')"
+          >
+            <span
+              :class="{'tank-panel-item-icon-not-zero': player.items.health.quantity > 0 && tank.health < tank.baseHealth}"
+            >
+              {{ tank.icons.health.icon }}
+            </span>
+            {{ tank.health }}
+          </p>
         </div>
       </div>
       <div class="shop-panel">
@@ -64,12 +166,12 @@
             :key="shopTanksIndex"
             @click="buyTank(shopTanksIndex)"
           >
-            <asvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'A'" />
-            <bsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'B'" />
-            <csvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'C'" />
-            <dsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'D'" />
-            <esvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'E'" />
-            <fsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.type === 'F'" />
+            <asvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.subTypeLabel === 'A'" />
+            <bsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.subTypeLabel === 'B'" />
+            <csvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.subTypeLabel === 'C'" />
+            <dsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.subTypeLabel === 'D'" />
+            <esvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.subTypeLabel === 'E'" />
+            <fsvg :class="{'shop-tank-icon-zero': players[currentPlayer].money < shopTank.price}" v-if="shopTank.subTypeLabel === 'F'" />
             ${{ shopTank.price }}
           </div>
         </div>
@@ -82,6 +184,7 @@
             class="shop-item"
             v-for="(item, itemIndex) in shopItems"
             :key="itemIndex"
+            :title="item.shopTitle"
             @click="buyItem(itemIndex)"
           >
             <span
@@ -155,10 +258,6 @@ export default {
       if (type === 'phase was changed') {
         this.$notify({
           group: 'phases',
-          clean: true
-        })
-        this.$notify({
-          group: 'phases',
           title: `player "${this.players[this.currentPlayer].name}"<br />phase "${this.phases[this.currentPhase].label.toUpperCase()}"`
         })
       }
@@ -194,11 +293,11 @@ export default {
         return
       }
       if (this.currentPhase === 0) { /** Is "setup" phase. */
-        if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.canTankMove(cell.item)) { /** Tank is on cell, prepare movement. */
+        if (cell.item && this.isTank(cell.item) && this.isNotHoleOrWall(cell) && this.canTankMove(cell.item)) { /** Tank is on cell, prepare movement. */
           this.resetBoardColors()
           this.changePhase(this.currentPhase + 1, false)
           this.handleCellClick(rowIndex, cellIndex)
-        } else if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && !this.canTankMove(cell.item) && this.canTankAttack(cell.item)) { /** Tank is on cell, cannot move, but can attack. */
+        } else if (cell.item && this.isTank(cell.item) && this.isNotHoleOrWall(cell) && !this.canTankMove(cell.item) && this.canTankAttack(cell.item)) { /** Tank is on cell, cannot move, but can attack. */
           this.resetBoardColors()
           this.currentPhase++
           this.changePhase(this.currentPhase + 1, false)
@@ -207,11 +306,11 @@ export default {
           this.putTankOnBoard(rowIndex, cellIndex)
         }
       } else if (this.currentPhase === 1 || this.currentPhase === 3) { /** Is first or second "movements" phase. */
-        if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.base) { /** Tank have moves and cell is "base" color. */
+        if (cell.item && this.isTank(cell.item) && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.base) { /** Tank have moves and cell is "base" color. */
           this.resetBoardColors()
           this.setCurrentCell(rowIndex, cellIndex)
           this.setSurroundingTalesColor(rowIndex, cellIndex, colors.move)
-        } else if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.move) { /** Tank have moves and cell is "move" color. */
+        } else if (cell.item && this.isTank(cell.item) && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankMove(cell.item) && cell.backgroundColor === colors.move) { /** Tank have moves and cell is "move" color. */
           this.currentCell = null
           this.resetBoardColors(rowIndex, cellIndex, colors.base)
         } else if ((!cell.item || this.isNotTank(cell.item)) && this.isNotHoleOrWall(cell) && cell.backgroundColor === colors.move) { /** Cell is that tank can move into. */
@@ -227,11 +326,11 @@ export default {
           this.changePhase(this.currentPhase === 1 ? 2 : 4, false)
         }
       } else if (this.currentPhase === 2) { /** Is "attacks" phase. */
-        if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && cell.backgroundColor !== colors.attack) { /** Tank is on this not-"attack" colored cell, show the tank`s range. */
+        if (cell.item && this.isTank(cell.item) && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && cell.backgroundColor !== colors.attack) { /** Tank is on this not-"attack" colored cell, show the tank`s range. */
           this.resetBoardColors()
           this.setCurrentCell(rowIndex, cellIndex)
           this.setRangeColor(rowIndex, cellIndex, colors.attack)
-        } else if (cell.item && cell.item.baseType === 'tank' && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && this.rows[rowIndex][cellIndex].item && (this.rows[rowIndex][cellIndex].item.positions.x === this.currentCell.x && this.rows[rowIndex][cellIndex].item.positions.y === this.currentCell.y) && cell.backgroundColor === colors.attack) { /** Tank range is shown, hide the range. */
+        } else if (cell.item && this.isTank(cell.item) && this.isNotHoleOrWall(cell) && this.isOwnTank(cell.item) && this.canTankAttack(cell.item) && this.rows[rowIndex][cellIndex].item && (this.rows[rowIndex][cellIndex].item.positions.x === this.currentCell.x && this.rows[rowIndex][cellIndex].item.positions.y === this.currentCell.y) && cell.backgroundColor === colors.attack) { /** Tank range is shown, hide the range. */
           this.currentCell = null
           this.resetBoardColors()
         } else if (this.cellCanBeAttacked(cell, rowIndex, cellIndex)) { /** Cell is "attack" color and have target - perform attack. */
@@ -243,7 +342,7 @@ export default {
             this.hitTheTarget(tank, rowIndex, cellIndex)
             this.afterTankAttack()
           }
-        } else if (cell.backgroundColor === colors.attack) { /** Cell is "attack" colors, but without target - perform missing attack. */
+        } else if (cell.backgroundColor === colors.attack && this.isNotRespSpot(cell)) { /** Cell is "attack" colors, but without target and is not respond type - perform missing attack. */
           const tank = this.getTankByCurrentCell()
           if (this.canTankAttack(tank)) {
             this.attackWasTriggered(tank)
@@ -262,6 +361,7 @@ export default {
     makeHole (rowIndex, cellIndex) {
       this.rows[rowIndex][cellIndex].baseType = 'hole'
       this.rows[rowIndex][cellIndex].backgroundColor = colors.hole
+      this.rows[rowIndex][cellIndex].item = null
     },
     setCurrentCell (rowIndex, cellIndex) {
       this.currentCell = {
@@ -280,6 +380,9 @@ export default {
     },
     isNotTank (item) {
       return item.baseType !== 'tank'
+    },
+    isTank (item) {
+      return item.baseType === 'tank'
     },
     isCellExistAndNotHole (i, j) {
       return !!(this.cellExist(i, j) && this.isNotHole(this.rows[i][j]))
@@ -532,6 +635,13 @@ export default {
         })
       })
       this.clearUnreachableRange(rowIndex, cellIndex, range)
+      for (let i = 0; i <= 19; i++) {
+        for (let j = 0; j <= 19; j++) {
+          if (this.cellExist(i, j) && !this.isNotRespSpot(cells[i][j]) && !cells[i][j].item) {
+            this.rows[i][j].backgroundColor = colors.base
+          }
+        }
+      }
     },
     setSurroundingTalesColor (i, j, color) {
       const operations = [
@@ -565,16 +675,36 @@ export default {
           if (item) {
             switch (item.baseType) {
               case 'money':
-                this.players[this.currentPlayer].money += 5
-                message = '+ 5 💰'
+                switch (item.subBaseType) {
+                  case 'two':
+                    this.players[this.currentPlayer].money += 2
+                    message = '+ 2 💰'
+                    break
+                  case 'five':
+                    this.players[this.currentPlayer].money += 5
+                    message = '+ 5 💰'
+                    break
+                  case 'ten':
+                    this.players[this.currentPlayer].money += 10
+                    message = '+ 10 💰'
+                    break
+                }
                 break
               case 'ammo':
                 this.players[this.currentPlayer].items.ammo.quantity++
                 message = '+ 1 💣'
                 break
               case 'fuel':
-                this.players[this.currentPlayer].items.fuel.quantity += 2
-                message = '+ 2 🛢'
+                switch (item.subBaseType) {
+                  case 'single':
+                    this.players[this.currentPlayer].items.fuel.quantity++
+                    message = '+ 1 🛢'
+                    break
+                  case 'double':
+                    this.players[this.currentPlayer].items.fuel.quantity += 2
+                    message = '+ 2 🛢'
+                    break
+                }
                 break
             }
           }
@@ -592,6 +722,7 @@ export default {
       return (cell.backgroundColor === colors.attack &&
         this.isNotHoleOrWall(cell) &&
         this.rows[rowIndex][cellIndex].item &&
+        this.isTank(this.rows[rowIndex][cellIndex].item) &&
         (
           (this.rows[rowIndex][cellIndex].item.positions.x !== this.currentCell.x && this.rows[rowIndex][cellIndex].item.positions.y !== this.currentCell.y) ||
           (this.rows[rowIndex][cellIndex].item.positions.x === this.currentCell.x && this.rows[rowIndex][cellIndex].item.positions.y !== this.currentCell.y) ||
