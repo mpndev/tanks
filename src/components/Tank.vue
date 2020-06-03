@@ -4,7 +4,7 @@
     v-show="!tank.isDead"
     @mouseenter="tank.isHoveredOnBoard = true"
     @mouseleave="tank.isHoveredOnBoard = false"
-    :title="`🏆${tank.level} 🖤${tank.health}`"
+    :title="`\n 🏆${tank.level} 🗡${tank.damage} 🖤${tank.health} \n`"
   >
     <div
       class="tank-notification"
