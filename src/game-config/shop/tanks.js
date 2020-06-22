@@ -138,7 +138,7 @@ export default [
     ...baseProps,
     price: 63,
     moves: 0,
-    baseHealth: 6,
+    baseHealth: 12,
     subTypeLabel: 'E',
     shopTitle: '\n Tower that cannot move at\n all, but have amazing health. \n\n Very good for deep strategy in\n middle game. \n',
     speed: 0,
